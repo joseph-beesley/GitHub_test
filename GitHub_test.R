@@ -1,5 +1,7 @@
 library(tidyverse)
 library(terra)
+library(tidyterra)
+library(viridis)
 
 japan = vect("JPN_adm1.shp")
 df.japan = read.csv("Jpn_liveBirth-perf2.csv")
@@ -9,6 +11,11 @@ colnames(df.japan)[2] = "Population_2011"
 
 japan = terra::merge(japan, df.japan)
 
-plot(japan,
-     "Population_2011",
-     main = "Japanese population density by CC.AA. (2011)")
+ggplot(japan)+
+  geom_spatvector(aes(fill = Population_2011),
+                  col = 'black') +
+  scale_fill_viridis() +
+  labs(title = "Japanese population density by CC.AA. (2011)",
+       fill = "Population Density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
